@@ -83,6 +83,9 @@ function ContactForm() {
             const data = new FormData();
             data.append('name', formData.name);
             data.append('phone', formData.phone);
+            // Send honeypot field for bot detection
+            const honeypotEl = document.getElementById('website') as HTMLInputElement;
+            if (honeypotEl?.value) data.append('website', honeypotEl.value);
             const result = await servicesAPI.submit(data);
             setCaseId(result.case_id);
             setSubmitted(true);
@@ -171,6 +174,11 @@ function ContactForm() {
                                 <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm">{error}</div>
                             )}
                             <form onSubmit={handleSubmit} className="space-y-5">
+                                {/* Honeypot — invisible to users, bots fill this */}
+                                <div style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0, overflow: 'hidden' }} aria-hidden="true">
+                                    <label htmlFor="website">Website</label>
+                                    <input type="text" id="website" name="website" tabIndex={-1} autoComplete="off" />
+                                </div>
                                 <div>
                                     <label className="block text-sm font-medium text-zinc-400 mb-1.5">Full Name *</label>
                                     <input type="text" required value={formData.name}

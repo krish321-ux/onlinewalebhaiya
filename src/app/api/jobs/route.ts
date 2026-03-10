@@ -32,7 +32,14 @@ export async function GET(request: Request) {
                 .select('id, title, department, qualification, no_of_vacancy, apply_start_date, last_date, notification_url, apply_link, job_type, state, category, advt_no, post_date', { count: 'exact' })
                 .eq('is_active', true);
 
-            if (stateFilter) query = query.eq('state', stateFilter);
+            if (stateFilter) {
+                const states = stateFilter.split(',').map(s => s.trim()).filter(Boolean);
+                if (states.length === 1) {
+                    query = query.eq('state', states[0]);
+                } else if (states.length > 1) {
+                    query = query.in('state', states);
+                }
+            }
             if (qualFilter) query = query.ilike('qualification', `%${qualFilter}%`);
             if (categoryFilter) query = query.ilike('category', `%${categoryFilter}%`);
 

@@ -7,6 +7,7 @@ import { Search, Filter, MapPin, Calendar, Building2, ExternalLink, ChevronLeft,
 import { INDIAN_STATES, QUALIFICATIONS } from '@/lib/constants';
 import Link from 'next/link';
 import { getSecureUrl } from '@/lib/secureUrl';
+import MultiSelect from '@/components/MultiSelect';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 const PER_PAGE = 20;
@@ -130,13 +131,8 @@ function JobsPageContent() {
                 {/* Filters */}
                 <div className={`overflow-hidden transition-all duration-300 ${showFilters ? 'max-h-40 opacity-100 mb-4' : 'max-h-0 opacity-0'}`}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#111] p-6 rounded-2xl border border-zinc-800">
-                        <div className="relative">
-                            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
-                            <select value={selectedState} onChange={e => { setSelectedState(e.target.value); setPage(1); }} className="w-full pl-10 pr-8 py-2.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:ring-2 focus:ring-[#E8652D] outline-none appearance-none cursor-pointer">
-                                <option value="">All India</option>
-                                {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
-                            </select>
-                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500 pointer-events-none" />
+                        <div>
+                            <MultiSelect options={['All India', ...INDIAN_STATES]} value={selectedState} onChange={v => { setSelectedState(v); setPage(1); }} placeholder="All States" className="" />
                         </div>
                         <div className="relative">
                             <select value={selectedQualification} onChange={e => { setSelectedQualification(e.target.value); setPage(1); }} className="w-full px-4 py-2.5 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:ring-2 focus:ring-[#E8652D] outline-none appearance-none cursor-pointer">
@@ -153,7 +149,9 @@ function JobsPageContent() {
                     <div className="flex items-center gap-2 flex-wrap">
                         {(selectedState || selectedQualification) && (
                             <>
-                                {selectedState && <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#E8652D]/10 text-[#E8652D] rounded-full text-xs font-medium"><MapPin className="h-3 w-3" />{selectedState}</span>}
+                                {selectedState && selectedState.split(',').map(s => s.trim()).filter(Boolean).map(s => (
+                                    <span key={s} className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#E8652D]/10 text-[#E8652D] rounded-full text-xs font-medium"><MapPin className="h-3 w-3" />{s}</span>
+                                ))}
                                 {selectedQualification && <span className="px-2.5 py-1 bg-[#E8652D]/10 text-[#E8652D] rounded-full text-xs font-medium">{selectedQualification}</span>}
                                 <button onClick={clearFilters} className="text-xs text-zinc-500 hover:text-white underline transition-colors">Clear</button>
                             </>

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Briefcase, GraduationCap, MapPin, ChevronDown, ArrowRight, Loader2, Calendar, Building2, ExternalLink, Search, Download } from 'lucide-react';
+import { Briefcase, GraduationCap, MapPin, ChevronDown, ArrowRight, Loader2, Calendar, Building2, ExternalLink, Search, Download, X } from 'lucide-react';
 import { INDIAN_STATES, QUALIFICATIONS } from '@/lib/constants';
 import { getSecureUrl } from '@/lib/secureUrl';
 
@@ -23,6 +23,63 @@ function useInView(ref: React.RefObject<HTMLElement | null>) {
         return () => observer.disconnect();
     }, [ref]);
     return inView;
+}
+
+// Dark-themed multi-select for state in the homepage filter
+function StateMultiSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+    const [open, setOpen] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+    const options = ['All India', ...INDIAN_STATES];
+    const selected = value ? value.split(',').map(v => v.trim()).filter(Boolean) : [];
+
+    useEffect(() => {
+        function handleClickOutside(e: MouseEvent) {
+            if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const toggle = (opt: string) => {
+        let next: string[];
+        if (selected.includes(opt)) {
+            next = selected.filter(s => s !== opt);
+        } else {
+            next = [...selected, opt];
+        }
+        onChange(next.join(', '));
+    };
+
+    return (
+        <div ref={ref} className="relative">
+            <div onClick={() => setOpen(!open)}
+                className="w-full pl-10 pr-8 py-3 rounded-xl bg-zinc-800/70 border border-zinc-700 text-white text-sm cursor-pointer flex items-center gap-2 min-h-[46px] transition-all focus-within:ring-2 focus-within:ring-[#E8652D]">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                <div className="flex flex-wrap gap-1 flex-1 min-w-0">
+                    {selected.length === 0 && <span className="text-zinc-400">All States</span>}
+                    {selected.map(s => (
+                        <span key={s} className="inline-flex items-center gap-1 bg-[#E8652D]/15 text-[#E8652D] text-xs px-2 py-0.5 rounded-md font-medium">
+                            {s}
+                            <button type="button" onClick={e => { e.stopPropagation(); toggle(s); }} className="hover:text-red-400">
+                                <X className="h-3 w-3" />
+                            </button>
+                        </span>
+                    ))}
+                </div>
+                <ChevronDown className={`h-4 w-4 text-zinc-500 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
+            </div>
+            {open && (
+                <div className="absolute z-50 top-full mt-1 left-0 right-0 bg-zinc-800 border border-zinc-700 rounded-xl shadow-xl max-h-56 overflow-y-auto">
+                    {options.map(opt => (
+                        <label key={opt} className="flex items-center gap-2.5 px-3 py-2 hover:bg-zinc-700 cursor-pointer text-sm text-zinc-300">
+                            <input type="checkbox" checked={selected.includes(opt)} onChange={() => toggle(opt)} className="accent-[#E8652D] h-4 w-4 rounded" />
+                            {opt}
+                        </label>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default function FilterSection() {
@@ -90,18 +147,10 @@ export default function FilterSection() {
                 {/* Filter Box */}
                 <div className="bg-[#111] rounded-2xl border border-zinc-800 p-6 md:p-8 shadow-xl">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {/* State */}
+                        {/* State Multi-Select */}
                         <div>
                             <label className="block text-xs text-zinc-500 uppercase tracking-wider font-medium mb-2">State</label>
-                            <div className="relative">
-                                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
-                                <select value={state} onChange={e => setState(e.target.value)}
-                                    className="w-full pl-10 pr-8 py-3 rounded-xl bg-zinc-800/70 border border-zinc-700 text-white text-sm focus:ring-2 focus:ring-[#E8652D] focus:border-transparent outline-none appearance-none cursor-pointer transition-all">
-                                    <option value="">All India</option>
-                                    {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
-                                </select>
-                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500 pointer-events-none" />
-                            </div>
+                            <StateMultiSelect value={state} onChange={setState} />
                         </div>
                         {/* Qualification */}
                         <div>
@@ -138,7 +187,15 @@ export default function FilterSection() {
                     {(state || qualification) && (
                         <div className="flex items-center gap-2 mt-4 flex-wrap">
                             <span className="text-xs text-zinc-500">Active filters:</span>
-                            {state && <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#E8652D]/10 text-[#E8652D] rounded-full text-xs font-medium">{state}</span>}
+                            {state && state.split(',').map(s => s.trim()).filter(Boolean).map(s => (
+                                <span key={s} className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#E8652D]/10 text-[#E8652D] rounded-full text-xs font-medium">
+                                    {s}
+                                    <button onClick={() => {
+                                        const newStates = state.split(',').map(v => v.trim()).filter(v => v && v !== s).join(', ');
+                                        setState(newStates);
+                                    }} className="hover:text-red-400 ml-0.5"><X className="h-3 w-3" /></button>
+                                </span>
+                            ))}
                             {qualification && <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#E8652D]/10 text-[#E8652D] rounded-full text-xs font-medium">{qualification}</span>}
                             <button onClick={() => { setState(''); setQualification(''); }} className="text-xs text-zinc-500 hover:text-white underline ml-1 transition-colors">Clear all</button>
                         </div>

@@ -130,6 +130,8 @@ export const servicesAPI = {
     getAll: () => apiFetch<any[]>('/api/services/requests'),
     updateStatus: (id: string, status: string) =>
         apiFetch<any>(`/api/services/requests/${id}`, { method: 'PUT', body: JSON.stringify({ status }) }),
+    delete: (id: string) =>
+        apiFetch<void>(`/api/services/requests/${id}`, { method: 'DELETE' }),
 };
 
 // ---- Chatbot ----

@@ -205,11 +205,7 @@ export default function AdminScholarships() {
                             </div>
                         </div>
 
-                        <select className={inputClass} value={formData.state} onChange={e => setFormData({ ...formData, state: e.target.value })}>
-                            <option value="">Select State</option>
-                            <option value="All India">All India</option>
-                            {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
-                        </select>
+                        <MultiSelect options={['All India', ...INDIAN_STATES]} value={formData.state} onChange={v => setFormData({ ...formData, state: v })} placeholder="Select State(s)" className={inputClass} />
                         <MultiSelect options={COMMON_QUALIFICATIONS} value={formData.qualification} onChange={v => setFormData({ ...formData, qualification: v })} placeholder="Select Qualifications" className={inputClass} />
                         <button type="submit" disabled={saving}
                             className="bg-[#E8652D] hover:bg-[#FF7A42] text-white py-2 rounded-lg flex items-center justify-center gap-2 transition-colors md:col-span-2 lg:col-span-3 mt-2">

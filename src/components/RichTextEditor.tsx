@@ -199,6 +199,23 @@ export default function RichTextEditor({ value, onChange, placeholder, className
                 },
             },
         },
+        clipboard: {
+            matchVisual: false,
+            matchers: [
+                [Node.ELEMENT_NODE, (_node: any, delta: any) => {
+                    // Strip background-color from pasted content to prevent white backgrounds
+                    if (delta && delta.ops) {
+                        delta.ops = delta.ops.map((op: any) => {
+                            if (op.attributes && op.attributes.background) {
+                                delete op.attributes.background;
+                            }
+                            return op;
+                        });
+                    }
+                    return delta;
+                }],
+            ],
+        },
     }), []);
 
     return (

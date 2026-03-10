@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { chatbotService } from '@/lib/services/chatbotService';
 import { whatsappNotification } from '@/lib/services/whatsappNotificationService';
+import { containsMaliciousPayload, sanitizeText } from '@/lib/security';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -32,10 +33,22 @@ export async function POST(request: Request) {
                     return new NextResponse('OK', { status: 200 });
                 }
 
-                console.log(`Message from ${from}: ${msg_body}`);
+                // Validate message length
+                if (typeof msg_body !== 'string' || msg_body.length > 1000) {
+                    return new NextResponse('OK', { status: 200 });
+                }
+
+                // Block malicious payloads (SQL, XSS, SSTI)
+                if (containsMaliciousPayload(msg_body)) {
+                    console.warn(`[Security] Blocked malicious WhatsApp message from ${from}: ${msg_body.substring(0, 100)}`);
+                    return new NextResponse('OK', { status: 200 });
+                }
+
+                const cleanMessage = sanitizeText(msg_body);
+                console.log(`Message from ${from}: ${cleanMessage}`);
 
                 try {
-                    const response = await chatbotService.processMessage(from, msg_body);
+                    const response = await chatbotService.processMessage(from, cleanMessage);
                     await whatsappNotification.sendMessage(from, response.answer);
                 } catch (error) {
                     console.error("Error processing WhatsApp message:", error);

@@ -470,22 +470,55 @@ class ChatbotService {
     }
 
     async bulkAddFAQs(items: { question: string; answer: string; category: string; keywords?: string[] }[]) {
-        const results = [];
-        for (const item of items) {
-            let embedding: number[] | null = null;
-            try {
-                const embeddingText = prepareForEmbedding(item.question);
-                embedding = await generateEmbedding(embeddingText);
-            } catch (err: any) {
-                console.warn('Embedding generation failed for bulk FAQ item:', err.message);
+        const BATCH_SIZE = 3;
+        const BATCH_DELAY = 200; // ms between batches to avoid overwhelming the model
+        const results: any[] = [];
+
+        // Process embeddings in small batches to prevent timeouts with large pastes
+        for (let i = 0; i < items.length; i += BATCH_SIZE) {
+            const batch = items.slice(i, i + BATCH_SIZE);
+
+            const batchResults = await Promise.allSettled(
+                batch.map(async (item) => {
+                    let embedding: number[] | null = null;
+                    try {
+                        const embeddingText = prepareForEmbedding(item.question);
+                        embedding = await generateEmbedding(embeddingText);
+                    } catch (err: any) {
+                        console.warn('Embedding generation failed for bulk FAQ item:', err.message);
+                    }
+                    return {
+                        question: item.question,
+                        answer: item.answer,
+                        category: item.category,
+                        keywords: item.keywords || [],
+                        embedding,
+                    };
+                })
+            );
+
+            for (const result of batchResults) {
+                if (result.status === 'fulfilled') {
+                    results.push(result.value);
+                } else {
+                    // Even if Promise.allSettled rejects, still save the FAQ without embedding
+                    const idx = batchResults.indexOf(result);
+                    const item = batch[idx];
+                    console.warn('Bulk FAQ batch item failed entirely:', result.reason);
+                    results.push({
+                        question: item.question,
+                        answer: item.answer,
+                        category: item.category,
+                        keywords: item.keywords || [],
+                        embedding: null,
+                    });
+                }
             }
-            results.push({
-                question: item.question,
-                answer: item.answer,
-                category: item.category,
-                keywords: item.keywords || [],
-                embedding,
-            });
+
+            // Small delay between batches to let the model breathe
+            if (i + BATCH_SIZE < items.length) {
+                await new Promise(resolve => setTimeout(resolve, BATCH_DELAY));
+            }
         }
 
         const { data, error } = await supabaseAdmin

@@ -292,7 +292,7 @@ export default function AdminChatbot() {
                 <div>
                     <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Liza AI Training (FAQ)</h1>
                     <p className="text-sm text-zinc-500 mt-1">
-                        {faqs.length} FAQs across {topics.length} topics • {faqs.filter(f => f.embedding).length} with embeddings
+                        {faqs.length} FAQs across {topics.length} topics
                     </p>
                 </div>
                 <div className="flex gap-2 flex-wrap">
@@ -539,20 +539,13 @@ export default function AdminChatbot() {
                                                         <div className="flex-1 min-w-0">
                                                             <h4 className="font-semibold text-zinc-900 dark:text-white text-sm mb-1">Q: {faq.question}</h4>
                                                             <p className="text-zinc-600 dark:text-zinc-400 text-sm whitespace-pre-line">A: {faq.answer}</p>
+                                                            {faq.keywords && faq.keywords.length > 0 && (
                                                             <div className="flex flex-wrap items-center gap-2 mt-2 text-xs">
-                                                                {faq.embedding ? (
-                                                                    <span className="flex items-center gap-1 text-green-500">
-                                                                        <CheckCircle className="h-3 w-3" /> Embedding
-                                                                    </span>
-                                                                ) : (
-                                                                    <span className="flex items-center gap-1 text-amber-500">
-                                                                        <AlertTriangle className="h-3 w-3" /> No embedding
-                                                                    </span>
-                                                                )}
-                                                                {faq.keywords?.slice(0, 4).map((kw, i) => (
+                                                                {faq.keywords.slice(0, 4).map((kw, i) => (
                                                                     <span key={i} className="bg-[#E8652D]/10 text-[#E8652D] px-1.5 py-0.5 rounded">{kw}</span>
                                                                 ))}
                                                             </div>
+                                                            )}
                                                         </div>
                                                         <div className="flex items-center gap-1 shrink-0">
                                                             <button onClick={() => handleEdit(faq)} className="text-zinc-400 hover:text-[#E8652D] transition-colors p-1.5" title="Edit">

@@ -223,11 +223,7 @@ export default function AdminJobs() {
                             </div>
                         </div>
 
-                        <select className={inputClass} value={formData.state} onChange={e => setFormData({ ...formData, state: e.target.value })}>
-                            <option value="">Select State</option>
-                            <option value="All India">All India</option>
-                            {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
-                        </select>
+                        <MultiSelect options={['All India', ...INDIAN_STATES]} value={formData.state} onChange={v => setFormData({ ...formData, state: v })} placeholder="Select State(s)" className={inputClass} />
                         <MultiSelect options={COMMON_QUALIFICATIONS} value={formData.qualification} onChange={v => setFormData({ ...formData, qualification: v })} placeholder="Select Qualifications" className={inputClass} />
                         <MultiSelect options={JOB_TYPES} value={formData.job_type} onChange={v => setFormData({ ...formData, job_type: v })} placeholder="Select Job Type" className={inputClass} />
                         <input placeholder="Category (e.g. Group A)" className={inputClass} value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} />

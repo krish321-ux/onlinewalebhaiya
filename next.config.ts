@@ -48,6 +48,14 @@ const nextConfig: NextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()'
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co https://*.jiobase.com https://onlinewalebhaiya.jiobase.com https://onlinewalebhaiya.com https://onlinewalebhaiya.in; connect-src 'self' https://*.supabase.co https://*.jiobase.com https://onlinewalebhaiya.com https://onlinewalebhaiya.in; frame-ancestors 'none'; base-uri 'self'; object-src 'none';"
           }
         ],
       },
