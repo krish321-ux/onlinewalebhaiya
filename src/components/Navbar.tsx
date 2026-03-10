@@ -53,7 +53,7 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 sm:h-20 items-center">
                     <Link href="/" className="flex-shrink-0 group">
-                        <img src="/logo.png" alt="OnlineWaleBhaiya" className="object-contain group-hover:brightness-110 transition-all duration-300 h-[50px] sm:h-[65px] w-auto" />
+                        <img src="/navbarLogo.png" alt="OnlineWaleBhaiya" className="object-contain group-hover:brightness-110 transition-all duration-300 h-[70px] sm:h-[90px] w-auto py-1" />
                     </Link>
 
                     <div className="hidden md:flex space-x-1 items-center">
