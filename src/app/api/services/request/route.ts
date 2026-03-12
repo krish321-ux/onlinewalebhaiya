@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { serviceRequestService } from '@/lib/services/serviceRequestService';
 import { whatsappNotification } from '@/lib/services/whatsappNotificationService';
+import { emailNotification } from '@/lib/services/emailNotificationService';
 import { supabaseAdmin } from '@/lib/db';
 
 // ── Rate Limiting (in-memory, per IP) ──
@@ -141,6 +142,14 @@ export async function POST(request: Request) {
             newRequest.state,
             newRequest.case_id
         ).catch(err => console.error('WhatsApp service request notification failed:', err));
+
+        emailNotification.sendNewServiceRequestEmail(
+            newRequest.name,
+            newRequest.phone,
+            newRequest.service_type,
+            newRequest.state,
+            newRequest.case_id
+        );
 
         return NextResponse.json(newRequest, { status: 201 });
     } catch (error: any) {

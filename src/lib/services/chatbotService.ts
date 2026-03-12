@@ -1,6 +1,7 @@
 import { supabase, supabaseAdmin } from '../db';
 import { conversationService } from './conversationService';
 import { whatsappNotification } from './whatsappNotificationService';
+import { emailNotification } from './emailNotificationService';
 import { generateEmbedding } from '../embeddingModel';
 import { searchFAQsAndPages, SearchableItem } from '../vectorSearch';
 import { normalizeQuery, prepareForEmbedding } from '../queryNormalizer';
@@ -321,6 +322,10 @@ class ChatbotService {
             whatsappNotification.sendNewLeadNotification(
                 session.name, session.phone, session.serviceMessage
             ).catch(err => console.error('WhatsApp notification failed:', err));
+
+            emailNotification.sendNewLeadEmail(
+                session.name, session.phone, session.serviceMessage
+            );
 
         } catch (error) {
             console.error('Error creating conversation:', error);
