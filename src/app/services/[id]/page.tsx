@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { Loader2, ArrowLeft, ChevronRight } from 'lucide-react';
+import { Loader2, ArrowLeft, ChevronRight, Monitor, Trash2, Award, Home as HomeIcon, Phone } from 'lucide-react';
 import { getSecureUrl } from '@/lib/secureUrl';
 import { sanitizeHtml } from '@/lib/sanitize';
 
@@ -92,7 +92,7 @@ export default function ServiceDetailPage() {
                     {service.detail_content ? (
                         <div
                             className="service-detail-content"
-                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(service.detail_content) }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(service.detail_content.replace(/&nbsp;/g, ' ')) }}
                         />
                     ) : (
                         <div className="text-center py-10 sm:py-16">
@@ -102,6 +102,45 @@ export default function ServiceDetailPage() {
                             </Link>
                         </div>
                     )}
+                </div>
+
+                {/* ═══ Trust Section ═══ */}
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-8">
+                    <div className="bg-gradient-to-br from-[#E8652D]/5 via-zinc-900/50 to-zinc-900/50 rounded-2xl sm:rounded-3xl border border-[#E8652D]/20 p-4 sm:p-8 md:p-10">
+                        <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 text-center">
+                            Why Everyone Trust <span className="text-[#E8652D]">Online Wale Bhaiya</span>?
+                        </h2>
+                        <p className="text-zinc-500 text-center text-xs sm:text-sm mb-6 sm:mb-8 max-w-lg mx-auto">Form भरते समय सही जानकारी और सही process का ध्यान रखना बहुत जरूरी होता है।</p>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                            {[
+                                { icon: Monitor, title: 'Live Screen Share', desc: 'पूरी process live screen share के माध्यम से दिखाई जाती है', color: 'text-blue-400', bg: 'bg-blue-500/10' },
+                                { icon: Trash2, title: 'Auto Document Delete', desc: 'Documents 30 सेकंड में automatically delete हो जाते हैं', color: 'text-purple-400', bg: 'bg-purple-500/10' },
+                                { icon: Award, title: 'TEC-CCE Certified', desc: 'Certified Village Level Entrepreneur द्वारा संचालित', color: 'text-amber-400', bg: 'bg-amber-500/10' },
+                                { icon: HomeIcon, title: 'Ghar Baithe Service', desc: 'WhatsApp के ज़रिए form filling घर बैठे हो सकता है', color: 'text-green-400', bg: 'bg-green-500/10' },
+                            ].map((item, i) => (
+                                <div key={i} className="flex items-start gap-3 p-3 sm:p-4 bg-zinc-900/60 rounded-xl border border-zinc-800/50 hover:border-zinc-700 transition-all">
+                                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg ${item.bg} flex items-center justify-center shrink-0`}>
+                                        <item.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${item.color}`} />
+                                    </div>
+                                    <div>
+                                        <p className="text-white font-semibold text-sm sm:text-base">{item.title}</p>
+                                        <p className="text-zinc-500 text-xs sm:text-sm mt-0.5 leading-relaxed">{item.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-6 sm:mt-8 text-center">
+                            <a href="https://wa.me/918581823795" target="_blank" rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] text-sm sm:text-base">
+                                <Phone className="h-4 w-4 sm:h-5 sm:w-5" /> WhatsApp/Call – 8581823795
+                            </a>
+                            <p className="text-zinc-600 text-xs mt-3">
+                                <a href="https://www.onlinewalebhaiya.com" className="text-[#E8652D] hover:text-[#FF7A42] transition-colors">www.onlinewalebhaiya.com</a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Back link */}
@@ -116,11 +155,18 @@ export default function ServiceDetailPage() {
             <style jsx global>{`
                 /* ── Base Content ── */
                 .service-detail-content {
+                    overflow-wrap: anywhere !important;
+                    word-wrap: break-word !important;
+                    word-break: normal !important;
                     color: #d4d4d8;
                     font-size: 15px;
                     line-height: 1.8;
-                    word-wrap: break-word;
-                    overflow-wrap: break-word;
+                }
+                .service-detail-content * {
+                    overflow-wrap: anywhere !important;
+                    word-wrap: break-word !important;
+                    word-break: normal !important;
+                    white-space: normal !important;
                 }
                 @media (min-width: 640px) { .service-detail-content { font-size: 16px; } }
                 @media (min-width: 768px) { .service-detail-content { font-size: 17px; line-height: 1.85; } }

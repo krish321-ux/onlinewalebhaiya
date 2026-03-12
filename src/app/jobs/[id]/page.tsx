@@ -81,8 +81,8 @@ export default function JobDetailPage() {
                     <div className="absolute top-0 left-1/4 w-[600px] h-[400px] bg-[#E8652D]/5 rounded-full blur-[150px]" />
                     <div className="absolute top-20 right-0 w-[300px] h-[300px] bg-[#E8652D]/3 rounded-full blur-[120px]" />
 
-                    <div className="relative z-10 pt-20 sm:pt-28 pb-8 sm:pb-12 px-3 sm:px-6 lg:px-8">
-                        <div className="max-w-5xl mx-auto">
+                    <div className="relative z-10 pt-20 sm:pt-28 pb-8 sm:pb-12 px-2 sm:px-6 lg:px-8">
+                        <div className="max-w-7xl mx-auto">
 
                             {/* Breadcrumbs */}
                             <div className="flex items-center gap-1.5 text-xs sm:text-sm text-zinc-500 mb-6 sm:mb-8 overflow-x-auto whitespace-nowrap pb-1 scrollbar-hide">
@@ -186,15 +186,15 @@ export default function JobDetailPage() {
                 </div>
 
                 {/* ═══════════════════ CONTENT AREA ═══════════════════ */}
-                <div className="px-3 sm:px-6 lg:px-8">
-                    <div className="max-w-5xl mx-auto">
+                <div className="px-2 sm:px-6 lg:px-8">
+                    <div className="max-w-7xl mx-auto">
 
                         {/* Rich HTML Content */}
                         {detail_content ? (
-                            <div className="bg-gradient-to-b from-zinc-900/50 to-[#111] rounded-2xl sm:rounded-3xl border border-zinc-800 p-4 sm:p-8 md:p-12 mb-6 detail-content">
+                            <div className="bg-gradient-to-b from-zinc-900/50 to-[#111] rounded-xl sm:rounded-3xl border border-zinc-800 p-3 sm:p-8 md:p-12 mb-6 detail-content overflow-hidden">
                                 <div
                                     className="prose prose-invert max-w-none prose-orange"
-                                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(detail_content) }}
+                                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(detail_content.replace(/&nbsp;/g, ' ')) }}
                                 />
                             </div>
                         ) : (
@@ -262,9 +262,20 @@ export default function JobDetailPage() {
 
             {/* ═══ Global Styles ═══ */}
             <style jsx global>{`
+                .detail-content {
+                    overflow-wrap: anywhere !important;
+                    word-wrap: break-word !important;
+                    word-break: normal !important;
+                }
+                .detail-content * {
+                    overflow-wrap: anywhere !important;
+                    word-wrap: break-word !important;
+                    word-break: normal !important;
+                    white-space: normal !important;
+                }
                 .detail-content h1, .detail-content h2 {
                     margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 800; color: #fff;
-                    word-break: break-word; letter-spacing: -0.01em;
+                    letter-spacing: -0.01em;
                     font-size: clamp(1.25rem, 4vw, 1.75rem);
                     border-bottom: 1px solid #27272a; padding-bottom: 0.3em;
                 }
@@ -274,7 +285,7 @@ export default function JobDetailPage() {
                 }
                 .detail-content p {
                     margin-bottom: 0.8em; color: #a1a1aa; line-height: 1.8;
-                    font-size: clamp(0.875rem, 2.5vw, 1rem); word-break: break-word;
+                    font-size: clamp(0.875rem, 2.5vw, 1rem);
                 }
                 .detail-content ul, .detail-content ol {
                     margin-bottom: 1.2em; padding-left: 1.25em; color: #a1a1aa;
@@ -303,7 +314,7 @@ export default function JobDetailPage() {
                     .detail-content th, .detail-content td { padding: 14px 20px; white-space: normal; }
                 }
                 .detail-content th { background: #1f1f23; font-weight: 700; color: #fff; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; }
-                .detail-content a { color: #E8652D; text-decoration: underline; text-underline-offset: 4px; word-break: break-all; }
+                .detail-content a { color: #E8652D; text-decoration: underline; text-underline-offset: 4px; overflow-wrap: anywhere; word-break: normal; }
                 .detail-content a:hover { color: #FF7A42; }
                 .detail-content strong { color: #e4e4e7; font-weight: 700; }
                 .detail-content img { max-width: 100%; height: auto; border-radius: 16px; margin: 1em 0; border: 1px solid #27272a; }

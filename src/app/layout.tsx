@@ -52,9 +52,9 @@ export const metadata: Metadata = {
     images: ['/logo.png'],
   },
   icons: {
-    icon: '/navbarLogo.png',
-    shortcut: '/navbarLogo.png',
-    apple: '/navbarLogo.png',
+    icon: '/favicon-enhanced.png',
+    shortcut: '/favicon-enhanced.png',
+    apple: '/favicon-enhanced.png',
   },
 };
 
