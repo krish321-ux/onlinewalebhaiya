@@ -10,7 +10,7 @@ const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
   title: {
-    default: 'Online Wale Bhaiya | India First Digital Cyber Cafe',
+    default: "Online Wale Bhaiya | India's First Digital Cyber Cafe",
     template: '%s | Online Wale Bhaiya'
   },
   description: 'Your one-stop destination for Government Jobs, Scholarships, Form Filling, and Online Services across India. Fast, secure, and reliable cyber cafe services at your fingertips.',
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_IN',
     url: '/',
-    title: 'Online Wale Bhaiya | India First Digital Cyber Cafe',
-    description: 'Find the latest Government Jobs, Scholarships, and skip the cyber cafe queue with our fast online form filling services.',
+    title: "Online Wale Bhaiya | India's First Digital Cyber Cafe",
+    description: "Online Wale Bhaiya is India's first digital cyber cafe offering PAN card, Aadhaar, Voter ID, Form filling, result check, ticket booking and all online services.",
     siteName: 'Online Wale Bhaiya',
     images: [
       {
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Online Wale Bhaiya | India First Digital Cyber Cafe',
+    title: "Online Wale Bhaiya | India's First Digital Cyber Cafe",
     description: 'Your one-stop destination for Government Jobs, Scholarships, and Form Filling across India.',
     images: ['/logo.png'],
   },
