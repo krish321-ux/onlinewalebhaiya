@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
     LayoutDashboard, Briefcase, GraduationCap,
-    FileText, Search, MessageSquare, LogOut, Menu, X, Users, Image, Layers, Globe
+    FileText, Search, MessageSquare, LogOut, Menu, X, Users, Image, Layers, Globe, Settings
 } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -43,6 +43,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { name: 'Website Pages', href: '/admin/chatbot/pages', icon: FileText },
         { name: 'About Us Page', href: '/admin/about', icon: Globe },
         { name: 'Gallery', href: '/admin/gallery', icon: Image },
+        { name: 'Settings', href: '/admin/settings', icon: Settings },
     ];
 
     const handleLogout = () => {

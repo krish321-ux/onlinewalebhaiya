@@ -13,6 +13,7 @@
     "@supabase/supabase-js": "^2.98.0",
     "@xenova/transformers": "^2.17.2",
     "bcryptjs": "^3.0.3",
+    "dotenv": "^17.3.1",
     "isomorphic-dompurify": "^3.0.0",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.574.0",
@@ -34,5 +35,11 @@
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "sharp": "0.34.5",
+    "quill-delta": "5.1.0"
   }
 }

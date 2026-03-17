@@ -8,16 +8,7 @@ const nextConfig: NextConfig = {
         hostname: '*.supabase.co',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'onlinewalebhaiya.jiobase.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.jiobase.com',
-        pathname: '/**',
-      },
+
     ],
   },
   async headers() {
